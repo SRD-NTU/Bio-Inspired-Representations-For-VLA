@@ -1,0 +1,69 @@
+task,model,parameters,full_resolution,method,budget_1_percent,budget_3_percent,budget_5_percent,budget_10_percent,budget_20_percent
+Spoon on Towel,OpenVLA,7.5B,29.2,Uniform,0.0,8.3,16.7,20.8,25.0
+Spoon on Towel,SpatialVLA,3B,20.8,Uniform,12.5,12.5,12.5,12.5,16.7
+Spoon on Towel,UniVLA,7.6B,50.0,Uniform,33.3,37.5,41.7,41.7,45.8
+Spoon on Towel,CronusVLA,0.5B,41.7,Uniform,16.7,29.2,29.2,37.5,41.7
+Spoon on Towel,CronusVLA,0.5B,41.7,Foveated,20.8 (+4.2),25.0 (-4.2),25.0 (-4.2),29.2 (-8.3),33.3 (-8.3)
+Spoon on Towel,CronusVLA,0.5B,41.7,Sunflower,33.3 (+16.7),37.5 (+8.3),33.3 (+4.2),50.0 (+12.5),50.0 (+8.3)
+Spoon on Towel,CronusVLA,0.5B,41.7,SALISA,12.5 (-4.2),37.5 (+8.3),41.7 (+12.5),41.7 (+4.2),45.8 (+4.2)
+Spoon on Towel,CronusVLA,0.5B,41.7,CORTAct focus,25.0 (+8.3),45.8 (+16.7),37.5 (+8.3),45.8 (+8.3),50.0 (+8.3)
+Spoon on Towel,CronusVLA,0.5B,41.7,CORTAct context,25.0 (+8.3),33.3 (+4.2),29.2 (0.0),41.7 (+4.2),54.2 (+12.5)
+Spoon on Towel,CronusVLA,0.5B,41.7,CORTAct,45.8 (+29.2),50.0 (+20.8),50.0 (+20.8),50.0 (+12.5),54.2 (+12.5)
+Spoon on Towel,MiniVLA,1B,54.2,Uniform,0.0,0.0,12.5,41.7,54.2
+Spoon on Towel,MiniVLA,1B,54.2,Foveated,0.0 (0.0),0.0 (0.0),0.0 (-12.5),4.2 (-37.5),20.8 (-33.3)
+Spoon on Towel,MiniVLA,1B,54.2,Sunflower,0.0 (0.0),4.2 (+4.2),4.2 (-8.3),37.5 (-4.2),50.0 (-4.2)
+Spoon on Towel,MiniVLA,1B,54.2,SALISA,0.0 (0.0),4.2 (+4.2),8.3 (-4.2),29.2 (-12.5),41.7 (-12.5)
+Spoon on Towel,MiniVLA,1B,54.2,CORTAct focus,0.0 (0.0),4.2 (+4.2),33.3 (+20.8),54.2 (+12.5),62.5 (+8.3)
+Spoon on Towel,MiniVLA,1B,54.2,CORTAct context,4.2 (+4.2),0.0 (0.0),16.7 (+4.2),54.2 (+12.5),54.2 (0.0)
+Spoon on Towel,MiniVLA,1B,54.2,CORTAct,4.2 (+4.2),4.2 (+4.2),37.5 (+25.0),66.7 (+25.0),62.5 (+8.3)
+Carrot on Plate,OpenVLA,7.5B,12.5,Uniform,0.0,4.2,4.2,8.3,12.5
+Carrot on Plate,SpatialVLA,3B,37.5,Uniform,4.2,12.5,16.7,29.2,33.3
+Carrot on Plate,UniVLA,7.6B,58.3,Uniform,33.3,37.5,41.7,45.8,54.2
+Carrot on Plate,CronusVLA,0.5B,41.7,Uniform,29.2,29.2,33.3,33.3,37.5
+Carrot on Plate,CronusVLA,0.5B,41.7,Foveated,8.3 (-20.8),33.3 (+4.2),50.0 (+16.7),50.0 (+16.7),50.0 (+12.5)
+Carrot on Plate,CronusVLA,0.5B,41.7,Sunflower,20.8 (-8.3),33.3 (+4.2),37.5 (+4.2),45.8 (+12.5),45.8 (+8.3)
+Carrot on Plate,CronusVLA,0.5B,41.7,SALISA,16.7 (-12.5),29.2 (0.0),33.3 (0.0),54.2 (+20.8),54.2 (+16.7)
+Carrot on Plate,CronusVLA,0.5B,41.7,CORTAct focus,33.3 (+4.1),41.7 (+12.5),41.7 (+8.3),41.7 (+8.3),50.0 (+12.5)
+Carrot on Plate,CronusVLA,0.5B,41.7,CORTAct context,29.2 (0.0),33.3 (+4.2),37.5 (+4.2),33.3 (0.0),45.8 (+8.3)
+Carrot on Plate,CronusVLA,0.5B,41.7,CORTAct,33.3 (+4.1),45.8 (+16.7),50.0 (+16.7),50.0 (+16.7),58.3 (+20.8)
+Carrot on Plate,MiniVLA,1B,41.7,Uniform,0.0,20.8,25.0,29.2,37.5
+Carrot on Plate,MiniVLA,1B,41.7,Foveated,0.0 (0.0),0.0 (-20.8),20.8 (-4.2),20.8 (-8.3),33.3 (-4.2)
+Carrot on Plate,MiniVLA,1B,41.7,Sunflower,0.0 (0.0),0.0 (-20.8),8.3 (-16.7),8.3 (-20.8),33.3 (-4.2)
+Carrot on Plate,MiniVLA,1B,41.7,SALISA,0.0 (0.0),20.8 (0.0),41.7 (+16.7),45.8 (+16.7),45.8 (+8.3)
+Carrot on Plate,MiniVLA,1B,41.7,CORTAct focus,0.0 (0.0),33.3 (+12.5),41.7 (+16.7),50.0 (+20.8),54.2 (+16.7)
+Carrot on Plate,MiniVLA,1B,41.7,CORTAct context,0.0 (0.0),20.8 (0.0),37.5 (+12.5),41.7 (+12.5),50.0 (+12.5)
+Carrot on Plate,MiniVLA,1B,41.7,CORTAct,0.0 (0.0),33.3 (+12.5),50.0 (+25.0),54.2 (+25.0),54.2 (+16.7)
+Stack Cube,OpenVLA,7.5B,25.0,Uniform,0.0,0.0,12.5,25.0,25.0
+Stack Cube,SpatialVLA,3B,37.5,Uniform,4.2,20.8,25.0,33.3,37.5
+Stack Cube,UniVLA,7.6B,4.2,Uniform,4.2,4.2,4.2,4.2,4.2
+Stack Cube,CronusVLA,0.5B,0.0,Uniform,0.0,0.0,0.0,0.0,0.0
+Stack Cube,CronusVLA,0.5B,0.0,Foveated,0.0 (0.0),0.0 (0.0),0.0 (0.0),0.0 (0.0),0.0 (0.0)
+Stack Cube,CronusVLA,0.5B,0.0,Sunflower,0.0 (0.0),0.0 (0.0),4.2 (+4.2),4.2 (+4.2),4.2 (+4.2)
+Stack Cube,CronusVLA,0.5B,0.0,SALISA,0.0 (0.0),0.0 (0.0),0.0 (0.0),0.0 (0.0),0.0 (0.0)
+Stack Cube,CronusVLA,0.5B,0.0,CORTAct focus,0.0 (0.0),0.0 (0.0),0.0 (0.0),0.0 (0.0),0.0 (0.0)
+Stack Cube,CronusVLA,0.5B,0.0,CORTAct context,0.0 (0.0),0.0 (0.0),4.2 (+4.2),4.2 (+4.2),4.2 (+4.2)
+Stack Cube,CronusVLA,0.5B,0.0,CORTAct,0.0 (0.0),0.0 (0.0),4.2 (+4.2),4.2 (+4.2),4.2 (+4.2)
+Stack Cube,MiniVLA,1B,79.2,Uniform,0.0,8.3,12.5,41.7,75.0
+Stack Cube,MiniVLA,1B,79.2,Foveated,0.0 (0.0),4.2 (-4.2),4.2 (-8.3),4.2 (-37.5),12.5 (-62.5)
+Stack Cube,MiniVLA,1B,79.2,Sunflower,0.0 (0.0),0.0 (-8.3),0.0 (-12.5),33.3 (-8.3),83.3 (+8.3)
+Stack Cube,MiniVLA,1B,79.2,SALISA,0.0 (0.0),12.5 (+4.2),25.0 (+12.5),25.0 (-16.7),29.2 (-45.8)
+Stack Cube,MiniVLA,1B,79.2,CORTAct focus,0.0 (0.0),16.7 (+8.3),20.8 (+8.3),58.3 (+16.7),83.3 (+8.3)
+Stack Cube,MiniVLA,1B,79.2,CORTAct context,0.0 (0.0),8.3 (0.0),12.5 (0.0),41.7 (0.0),75.0 (0.0)
+Stack Cube,MiniVLA,1B,79.2,CORTAct,0.0 (0.0),16.7 (+8.3),20.8 (+8.3),58.3 (+16.7),87.5 (+12.5)
+Eggplant in Basket,OpenVLA,7.5B,54.2,Uniform,0.0,4.2,8.3,29.2,45.8
+Eggplant in Basket,SpatialVLA,3B,79.2,Uniform,62.5,79.2,79.2,79.2,79.2
+Eggplant in Basket,UniVLA,7.6B,79.2,Uniform,45.8,62.5,75.0,79.2,79.2
+Eggplant in Basket,CronusVLA,0.5B,75.0,Uniform,45.8,50.0,66.7,70.8,70.8
+Eggplant in Basket,CronusVLA,0.5B,75.0,Foveated,0.0 (-45.8),41.7 (-8.3),50.0 (-16.7),58.3 (-12.5),70.8 (0.0)
+Eggplant in Basket,CronusVLA,0.5B,75.0,Sunflower,45.8 (0.0),62.5 (+12.5),66.7 (0.0),83.3 (+12.5),83.3 (+12.5)
+Eggplant in Basket,CronusVLA,0.5B,75.0,SALISA,29.2 (-16.7),58.3 (+8.3),75.0 (+8.3),79.2 (+8.3),83.3 (+12.5)
+Eggplant in Basket,CronusVLA,0.5B,75.0,CORTAct focus,50.0 (+4.2),66.7 (+16.7),83.3 (+16.7),83.3 (+12.5),87.5 (+16.7)
+Eggplant in Basket,CronusVLA,0.5B,75.0,CORTAct context,50.0 (+4.2),62.5 (+12.5),83.3 (+16.7),75.0 (+4.2),70.8 (0.0)
+Eggplant in Basket,CronusVLA,0.5B,75.0,CORTAct,54.2 (+8.3),66.7 (+16.7),87.5 (+20.8),79.2 (+8.3),87.5 (+16.7)
+Eggplant in Basket,MiniVLA,1B,12.5,Uniform,0.0,4.2,4.2,8.3,8.3
+Eggplant in Basket,MiniVLA,1B,12.5,Foveated,0.0 (0.0),0.0 (-4.2),0.0 (-4.2),0.0 (-8.3),12.5 (+4.2)
+Eggplant in Basket,MiniVLA,1B,12.5,Sunflower,0.0 (0.0),4.2 (0.0),12.5 (+8.3),33.3 (+25.0),33.3 (+25.0)
+Eggplant in Basket,MiniVLA,1B,12.5,SALISA,0.0 (0.0),0.0 (-4.2),0.0 (-4.2),12.5 (+4.2),16.7 (+8.3)
+Eggplant in Basket,MiniVLA,1B,12.5,CORTAct focus,0.0 (0.0),29.2 (+25.0),12.5 (+8.3),33.3 (+25.0),25.0 (+16.7)
+Eggplant in Basket,MiniVLA,1B,12.5,CORTAct context,0.0 (0.0),8.3 (+4.2),4.2 (0.0),16.7 (+8.3),20.8 (+12.5)
+Eggplant in Basket,MiniVLA,1B,12.5,CORTAct,0.0 (0.0),37.5 (+33.3),12.5 (+8.3),33.3 (+25.0),37.5 (+29.2)
