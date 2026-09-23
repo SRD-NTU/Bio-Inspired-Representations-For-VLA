@@ -301,14 +301,12 @@ function initializeDatasetChart(rows, tasks, hasSteps, targetId) {
   update();
 }
 
-async function loadTable(path, targetId, tasks, hasSteps, chartTargetId, toolsId) {
+function loadTable(dataId, targetId, tasks, hasSteps, chartTargetId, toolsId) {
   const target = document.getElementById(targetId);
   try {
-    const response = await fetch(path);
-    if (!response.ok) throw new Error(`Could not load ${path}`);
-    const documentData = new DOMParser().parseFromString(await response.text(), 'text/html');
-    const dataTable = documentData.querySelector('table');
-    if (!dataTable?.tHead?.rows.length || !dataTable.tBodies.length) throw new Error(`No results table found in ${path}`);
+    const dataTemplate = document.getElementById(dataId);
+    const dataTable = dataTemplate?.content.querySelector('table');
+    if (!dataTable?.tHead?.rows.length || !dataTable.tBodies.length) throw new Error(`No results table found in ${dataId}`);
     const headers = [...dataTable.tHead.rows[0].cells].map(cell => cell.textContent);
     const rows = [...dataTable.tBodies[0].rows].map(row => {
       const values = [...row.cells].map(cell => cell.textContent);
@@ -318,11 +316,11 @@ async function loadTable(path, targetId, tasks, hasSteps, chartTargetId, toolsId
     if (!target.querySelector('.task-card')) throw new Error('No result rows were found.');
     initializeDatasetChart(rows, tasks, hasSteps, chartTargetId);
   } catch (error) {
-    target.innerHTML = '<p class="error">Results Could Not Be Loaded. Please Open This Page Through The Project Website Server.</p>';
+    target.innerHTML = '<p class="error">Results Could Not Be Loaded.</p>';
     document.getElementById(chartTargetId).innerHTML = '';
     console.error(error);
   }
 }
 
-loadTable('data/LIBERO.html', 'suite-results', displayTasks.libero, true, 'libero-analysis', 'suite-tools');
-loadTable('data/SIMPLER-WidowX.html', 'task-results', displayTasks.simpler, false, 'simpler-analysis', 'task-tools');
+loadTable('libero-data', 'suite-results', displayTasks.libero, true, 'libero-analysis', 'suite-tools');
+loadTable('simpler-data', 'task-results', displayTasks.simpler, false, 'simpler-analysis', 'task-tools');
