@@ -19,25 +19,6 @@ const methodColors = {
   Uniform: '#4d4d4d', Foveated: '#0072b2', Sunflower: '#e69f00', SALISA: '#d55e00',
   'CORTAct^focus': '#cc79a7', 'CORTAct^context': '#56b4e9', CORTAct: '#009e73'
 };
-function parseCSV(text) {
-  const rows = [];
-  let row = [], field = '', quoted = false;
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i];
-    if (quoted) {
-      if (ch === '"' && text[i + 1] === '"') { field += '"'; i++; }
-      else if (ch === '"') quoted = false;
-      else field += ch;
-    } else if (ch === '"') quoted = true;
-    else if (ch === ',') { row.push(field); field = ''; }
-    else if (ch === '\n') { row.push(field.replace(/\r$/, '')); rows.push(row); row = []; field = ''; }
-    else field += ch;
-  }
-  if (field.length || row.length) { row.push(field.replace(/\r$/, '')); rows.push(row); }
-  const [header, ...data] = rows;
-  return data.filter(r => r.some(Boolean)).map(values => Object.fromEntries(header.map((key, i) => [key, values[i] ?? ''])));
-}
-
 function esc(value) {
   return String(value).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
 }
@@ -325,7 +306,14 @@ async function loadTable(path, targetId, tasks, hasSteps, chartTargetId, toolsId
   try {
     const response = await fetch(path);
     if (!response.ok) throw new Error(`Could not load ${path}`);
-    const rows = parseCSV(await response.text());
+    const documentData = new DOMParser().parseFromString(await response.text(), 'text/html');
+    const dataTable = documentData.querySelector('table');
+    if (!dataTable?.tHead?.rows.length || !dataTable.tBodies.length) throw new Error(`No results table found in ${path}`);
+    const headers = [...dataTable.tHead.rows[0].cells].map(cell => cell.textContent);
+    const rows = [...dataTable.tBodies[0].rows].map(row => {
+      const values = [...row.cells].map(cell => cell.textContent);
+      return Object.fromEntries(headers.map((header, index) => [header, values[index] ?? '']));
+    });
     setupTableTools(rows, tasks, targetId, toolsId, hasSteps);
     if (!target.querySelector('.task-card')) throw new Error('No result rows were found.');
     initializeDatasetChart(rows, tasks, hasSteps, chartTargetId);
@@ -336,5 +324,5 @@ async function loadTable(path, targetId, tasks, hasSteps, chartTargetId, toolsId
   }
 }
 
-loadTable('data/LIBERO.csv', 'suite-results', displayTasks.libero, true, 'libero-analysis', 'suite-tools');
-loadTable('data/SIMPLER-WidowX.csv', 'task-results', displayTasks.simpler, false, 'simpler-analysis', 'task-tools');
+loadTable('data/LIBERO.html', 'suite-results', displayTasks.libero, true, 'libero-analysis', 'suite-tools');
+loadTable('data/SIMPLER-WidowX.html', 'task-results', displayTasks.simpler, false, 'simpler-analysis', 'task-tools');

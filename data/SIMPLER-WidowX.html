@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIMPLER WidowX Results</title>
+</head>
+<body>
+  <table>
+    <caption>SIMPLER WidowX Results</caption>
+    <thead><tr><th scope="col">Task</th><th scope="col">Model</th><th scope="col">Params</th><th scope="col">Full Res</th><th scope="col">Method</th><th scope="col">1% Success Rate (%)</th><th scope="col">1% Change vs Uniform</th><th scope="col">3% Success Rate (%)</th><th scope="col">3% Change vs Uniform</th><th scope="col">5% Success Rate (%)</th><th scope="col">5% Change vs Uniform</th><th scope="col">10% Success Rate (%)</th><th scope="col">10% Change vs Uniform</th><th scope="col">20% Success Rate (%)</th><th scope="col">20% Change vs Uniform</th></tr></thead>
+    <tbody>
+    <tr><td>Spoon on Towel</td><td>OpenVLA</td><td>7.5B</td><td>29.2</td><td>Uniform</td><td>0.0</td><td></td><td>8.3</td><td></td><td>16.7</td><td></td><td>20.8</td><td></td><td>25.0</td><td></td></tr>
+    <tr><td>Spoon on Towel</td><td>SpatialVLA</td><td>3B</td><td>20.8</td><td>Uniform</td><td>12.5</td><td></td><td>12.5</td><td></td><td>12.5</td><td></td><td>12.5</td><td></td><td>16.7</td><td></td></tr>
+    <tr><td>Spoon on Towel</td><td>UniVLA</td><td>7.6B</td><td>50.0</td><td>Uniform</td><td>33.3</td><td></td><td>37.5</td><td></td><td>41.7</td><td></td><td>41.7</td><td></td><td>45.8</td><td></td></tr>
+    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>Uniform</td><td>16.7</td><td></td><td>29.2</td><td></td><td>29.2</td><td></td><td>37.5</td><td></td><td>41.7</td><td></td></tr>
+    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>Foveated</td><td>20.8</td><td>+4.2</td><td>25.0</td><td>-4.2</td><td>25.0</td><td>-4.2</td><td>29.2</td><td>-8.3</td><td>33.3</td><td>-8.3</td></tr>
+    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>Sunflower</td><td>33.3</td><td>+16.7</td><td>37.5</td><td>+8.3</td><td>33.3</td><td>+4.2</td><td>50.0</td><td>+12.5</td><td>50.0</td><td>+8.3</td></tr>
+    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>SALISA</td><td>12.5</td><td>-4.2</td><td>37.5</td><td>+8.3</td><td>41.7</td><td>+12.5</td><td>41.7</td><td>+4.2</td><td>45.8</td><td>+4.2</td></tr>
+    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>CORTAct^focus</td><td>25.0</td><td>+8.3</td><td>45.8</td><td>+16.7</td><td>37.5</td><td>+8.3</td><td>45.8</td><td>+8.3</td><td>50.0</td><td>+8.3</td></tr>
+    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>CORTAct^context</td><td>25.0</td><td>+8.3</td><td>33.3</td><td>+4.2</td><td>29.2</td><td>0.0</td><td>41.7</td><td>+4.2</td><td>54.2</td><td>+12.5</td></tr>
+    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>CORTAct</td><td>45.8</td><td>+29.2</td><td>50.0</td><td>+20.8</td><td>50.0</td><td>+20.8</td><td>50.0</td><td>+12.5</td><td>54.2</td><td>+12.5</td></tr>
+    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>Uniform</td><td>0.0</td><td></td><td>0.0</td><td></td><td>12.5</td><td></td><td>41.7</td><td></td><td>54.2</td><td></td></tr>
+    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>Foveated</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>-12.5</td><td>4.2</td><td>-37.5</td><td>20.8</td><td>-33.3</td></tr>
+    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>Sunflower</td><td>0.0</td><td>0.0</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>-8.3</td><td>37.5</td><td>-4.2</td><td>50.0</td><td>-4.2</td></tr>
+    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>SALISA</td><td>0.0</td><td>0.0</td><td>4.2</td><td>+4.2</td><td>8.3</td><td>-4.2</td><td>29.2</td><td>-12.5</td><td>41.7</td><td>-12.5</td></tr>
+    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>CORTAct^focus</td><td>0.0</td><td>0.0</td><td>4.2</td><td>+4.2</td><td>33.3</td><td>+20.8</td><td>54.2</td><td>+12.5</td><td>62.5</td><td>+8.3</td></tr>
+    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>CORTAct^context</td><td>4.2</td><td>+4.2</td><td>0.0</td><td>0.0</td><td>16.7</td><td>+4.2</td><td>54.2</td><td>+12.5</td><td>54.2</td><td>0.0</td></tr>
+    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>CORTAct</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td><td>37.5</td><td>+25.0</td><td>66.7</td><td>+25.0</td><td>62.5</td><td>+8.3</td></tr>
+    <tr><td>Carrot on Plate</td><td>OpenVLA</td><td>7.5B</td><td>12.5</td><td>Uniform</td><td>0.0</td><td></td><td>4.2</td><td></td><td>4.2</td><td></td><td>8.3</td><td></td><td>12.5</td><td></td></tr>
+    <tr><td>Carrot on Plate</td><td>SpatialVLA</td><td>3B</td><td>37.5</td><td>Uniform</td><td>4.2</td><td></td><td>12.5</td><td></td><td>16.7</td><td></td><td>29.2</td><td></td><td>33.3</td><td></td></tr>
+    <tr><td>Carrot on Plate</td><td>UniVLA</td><td>7.6B</td><td>58.3</td><td>Uniform</td><td>33.3</td><td></td><td>37.5</td><td></td><td>41.7</td><td></td><td>45.8</td><td></td><td>54.2</td><td></td></tr>
+    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>Uniform</td><td>29.2</td><td></td><td>29.2</td><td></td><td>33.3</td><td></td><td>33.3</td><td></td><td>37.5</td><td></td></tr>
+    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>Foveated</td><td>8.3</td><td>-20.8</td><td>33.3</td><td>+4.2</td><td>50.0</td><td>+16.7</td><td>50.0</td><td>+16.7</td><td>50.0</td><td>+12.5</td></tr>
+    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>Sunflower</td><td>20.8</td><td>-8.3</td><td>33.3</td><td>+4.2</td><td>37.5</td><td>+4.2</td><td>45.8</td><td>+12.5</td><td>45.8</td><td>+8.3</td></tr>
+    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>SALISA</td><td>16.7</td><td>-12.5</td><td>29.2</td><td>0.0</td><td>33.3</td><td>0.0</td><td>54.2</td><td>+20.8</td><td>54.2</td><td>+16.7</td></tr>
+    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>CORTAct^focus</td><td>33.3</td><td>+4.1</td><td>41.7</td><td>+12.5</td><td>41.7</td><td>+8.3</td><td>41.7</td><td>+8.3</td><td>50.0</td><td>+12.5</td></tr>
+    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>CORTAct^context</td><td>29.2</td><td>0.0</td><td>33.3</td><td>+4.2</td><td>37.5</td><td>+4.2</td><td>33.3</td><td>0.0</td><td>45.8</td><td>+8.3</td></tr>
+    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>CORTAct</td><td>33.3</td><td>+4.1</td><td>45.8</td><td>+16.7</td><td>50.0</td><td>+16.7</td><td>50.0</td><td>+16.7</td><td>58.3</td><td>+20.8</td></tr>
+    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>Uniform</td><td>0.0</td><td></td><td>20.8</td><td></td><td>25.0</td><td></td><td>29.2</td><td></td><td>37.5</td><td></td></tr>
+    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>Foveated</td><td>0.0</td><td>0.0</td><td>0.0</td><td>-20.8</td><td>20.8</td><td>-4.2</td><td>20.8</td><td>-8.3</td><td>33.3</td><td>-4.2</td></tr>
+    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>Sunflower</td><td>0.0</td><td>0.0</td><td>0.0</td><td>-20.8</td><td>8.3</td><td>-16.7</td><td>8.3</td><td>-20.8</td><td>33.3</td><td>-4.2</td></tr>
+    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>SALISA</td><td>0.0</td><td>0.0</td><td>20.8</td><td>0.0</td><td>41.7</td><td>+16.7</td><td>45.8</td><td>+16.7</td><td>45.8</td><td>+8.3</td></tr>
+    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>CORTAct^focus</td><td>0.0</td><td>0.0</td><td>33.3</td><td>+12.5</td><td>41.7</td><td>+16.7</td><td>50.0</td><td>+20.8</td><td>54.2</td><td>+16.7</td></tr>
+    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>CORTAct^context</td><td>0.0</td><td>0.0</td><td>20.8</td><td>0.0</td><td>37.5</td><td>+12.5</td><td>41.7</td><td>+12.5</td><td>50.0</td><td>+12.5</td></tr>
+    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>CORTAct</td><td>0.0</td><td>0.0</td><td>33.3</td><td>+12.5</td><td>50.0</td><td>+25.0</td><td>54.2</td><td>+25.0</td><td>54.2</td><td>+16.7</td></tr>
+    <tr><td>Stack Cube</td><td>OpenVLA</td><td>7.5B</td><td>25.0</td><td>Uniform</td><td>0.0</td><td></td><td>0.0</td><td></td><td>12.5</td><td></td><td>25.0</td><td></td><td>25.0</td><td></td></tr>
+    <tr><td>Stack Cube</td><td>SpatialVLA</td><td>3B</td><td>37.5</td><td>Uniform</td><td>4.2</td><td></td><td>20.8</td><td></td><td>25.0</td><td></td><td>33.3</td><td></td><td>37.5</td><td></td></tr>
+    <tr><td>Stack Cube</td><td>UniVLA</td><td>7.6B</td><td>4.2</td><td>Uniform</td><td>4.2</td><td></td><td>4.2</td><td></td><td>4.2</td><td></td><td>4.2</td><td></td><td>4.2</td><td></td></tr>
+    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>Uniform</td><td>0.0</td><td></td><td>0.0</td><td></td><td>0.0</td><td></td><td>0.0</td><td></td><td>0.0</td><td></td></tr>
+    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>Foveated</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td></tr>
+    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>Sunflower</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td></tr>
+    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>SALISA</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td></tr>
+    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>CORTAct^focus</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td></tr>
+    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>CORTAct^context</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td></tr>
+    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>CORTAct</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td></tr>
+    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>Uniform</td><td>0.0</td><td></td><td>8.3</td><td></td><td>12.5</td><td></td><td>41.7</td><td></td><td>75.0</td><td></td></tr>
+    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>Foveated</td><td>0.0</td><td>0.0</td><td>4.2</td><td>-4.2</td><td>4.2</td><td>-8.3</td><td>4.2</td><td>-37.5</td><td>12.5</td><td>-62.5</td></tr>
+    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>Sunflower</td><td>0.0</td><td>0.0</td><td>0.0</td><td>-8.3</td><td>0.0</td><td>-12.5</td><td>33.3</td><td>-8.3</td><td>83.3</td><td>+8.3</td></tr>
+    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>SALISA</td><td>0.0</td><td>0.0</td><td>12.5</td><td>+4.2</td><td>25.0</td><td>+12.5</td><td>25.0</td><td>-16.7</td><td>29.2</td><td>-45.8</td></tr>
+    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>CORTAct^focus</td><td>0.0</td><td>0.0</td><td>16.7</td><td>+8.3</td><td>20.8</td><td>+8.3</td><td>58.3</td><td>+16.7</td><td>83.3</td><td>+8.3</td></tr>
+    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>CORTAct^context</td><td>0.0</td><td>0.0</td><td>8.3</td><td>0.0</td><td>12.5</td><td>0.0</td><td>41.7</td><td>0.0</td><td>75.0</td><td>0.0</td></tr>
+    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>CORTAct</td><td>0.0</td><td>0.0</td><td>16.7</td><td>+8.3</td><td>20.8</td><td>+8.3</td><td>58.3</td><td>+16.7</td><td>87.5</td><td>+12.5</td></tr>
+    <tr><td>Eggplant in Basket</td><td>OpenVLA</td><td>7.5B</td><td>54.2</td><td>Uniform</td><td>0.0</td><td></td><td>4.2</td><td></td><td>8.3</td><td></td><td>29.2</td><td></td><td>45.8</td><td></td></tr>
+    <tr><td>Eggplant in Basket</td><td>SpatialVLA</td><td>3B</td><td>79.2</td><td>Uniform</td><td>62.5</td><td></td><td>79.2</td><td></td><td>79.2</td><td></td><td>79.2</td><td></td><td>79.2</td><td></td></tr>
+    <tr><td>Eggplant in Basket</td><td>UniVLA</td><td>7.6B</td><td>79.2</td><td>Uniform</td><td>45.8</td><td></td><td>62.5</td><td></td><td>75.0</td><td></td><td>79.2</td><td></td><td>79.2</td><td></td></tr>
+    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>Uniform</td><td>45.8</td><td></td><td>50.0</td><td></td><td>66.7</td><td></td><td>70.8</td><td></td><td>70.8</td><td></td></tr>
+    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>Foveated</td><td>0.0</td><td>-45.8</td><td>41.7</td><td>-8.3</td><td>50.0</td><td>-16.7</td><td>58.3</td><td>-12.5</td><td>70.8</td><td>0.0</td></tr>
+    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>Sunflower</td><td>45.8</td><td>0.0</td><td>62.5</td><td>+12.5</td><td>66.7</td><td>0.0</td><td>83.3</td><td>+12.5</td><td>83.3</td><td>+12.5</td></tr>
+    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>SALISA</td><td>29.2</td><td>-16.7</td><td>58.3</td><td>+8.3</td><td>75.0</td><td>+8.3</td><td>79.2</td><td>+8.3</td><td>83.3</td><td>+12.5</td></tr>
+    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>CORTAct^focus</td><td>50.0</td><td>+4.2</td><td>66.7</td><td>+16.7</td><td>83.3</td><td>+16.7</td><td>83.3</td><td>+12.5</td><td>87.5</td><td>+16.7</td></tr>
+    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>CORTAct^context</td><td>50.0</td><td>+4.2</td><td>62.5</td><td>+12.5</td><td>83.3</td><td>+16.7</td><td>75.0</td><td>+4.2</td><td>70.8</td><td>0.0</td></tr>
+    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>CORTAct</td><td>54.2</td><td>+8.3</td><td>66.7</td><td>+16.7</td><td>87.5</td><td>+20.8</td><td>83.3</td><td>+12.5</td><td>87.5</td><td>+16.7</td></tr>
+    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>Uniform</td><td>0.0</td><td></td><td>4.2</td><td></td><td>4.2</td><td></td><td>8.3</td><td></td><td>8.3</td><td></td></tr>
+    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>Foveated</td><td>0.0</td><td>0.0</td><td>0.0</td><td>-4.2</td><td>0.0</td><td>-4.2</td><td>0.0</td><td>-8.3</td><td>12.5</td><td>+4.2</td></tr>
+    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>Sunflower</td><td>0.0</td><td>0.0</td><td>4.2</td><td>0.0</td><td>12.5</td><td>+8.3</td><td>33.3</td><td>+25.0</td><td>33.3</td><td>+25.0</td></tr>
+    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>SALISA</td><td>0.0</td><td>0.0</td><td>0.0</td><td>-4.2</td><td>0.0</td><td>-4.2</td><td>12.5</td><td>+4.2</td><td>16.7</td><td>+8.3</td></tr>
+    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>CORTAct^focus</td><td>0.0</td><td>0.0</td><td>29.2</td><td>+25.0</td><td>12.5</td><td>+8.3</td><td>33.3</td><td>+25.0</td><td>25.0</td><td>+16.7</td></tr>
+    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>CORTAct^context</td><td>0.0</td><td>0.0</td><td>8.3</td><td>+4.2</td><td>4.2</td><td>0.0</td><td>16.7</td><td>+8.3</td><td>20.8</td><td>+12.5</td></tr>
+    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>CORTAct</td><td>0.0</td><td>0.0</td><td>37.5</td><td>+33.3</td><td>12.5</td><td>+8.3</td><td>33.3</td><td>+25.0</td><td>37.5</td><td>+29.2</td></tr>
+    </tbody>
+  </table>
+</body>
+</html>
