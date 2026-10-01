@@ -5,7 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Additional Experimental Results For HERo, An Anonymous Paper Submission.">
   <meta name="theme-color" content="#ffffff">
-  <title>HERo | Additional Results</title>
+  <title>HERo | Experimental Details &amp; Results</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="scripts.js?v=2" defer></script>
 </head>
@@ -13,18 +16,110 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="#top" aria-label="HERo, Top Of Page">HERo</a>
-      <span class="submission-label">Anonymous Submission</span>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="#experiment-details">Additional Experiments</a>
+        <a href="#additional-results">Additional Results</a>
+      </nav>
     </div>
   </header>
 
   <main class="container" id="top">
-    <section class="intro" aria-labelledby="page-title">
-      <p class="eyebrow">Supplementary Material</p>
-      <h1 id="page-title">Additional Results</h1>
-      <p class="lead">Extended Results For HERo Across Task Suites, VLA Models, And Visual Budgets.</p>
+    <section class="supplementary-video" aria-labelledby="video-heading">
+      <h1 id="details-heading-video">Accompanying Video</h1>
+      <p>Please refer to the accompanying video for an overview of the methodology and qualitative results.</p>
+      
+      <video controls preload="metadata">
+        <source src="video.mp4" type="video/mp4">
+        Your browser does not support embedded video. <a href="video.mp4">Download the supplementary video</a>.
+      </video>
     </section>
 
-    <section class="results-section" aria-labelledby="suite-heading">
+    <article class="experiment-details" aria-labelledby="details-heading-0">
+      <p class="eyebrow">Supplementary Material</p>
+      <section id="experiment-details" class="experiment-section" aria-labelledby="details-heading-0" style="border-bottom: 1px dashed #ccc">
+      <h1 id="details-heading-0">Additional Experimental Details</h1>
+      <p><strong>Scope.</strong> HERo (Human-like Eyes for Robots) is the training-free visual front end introduced in the main paper. AdVisR denotes its Adaptive Visual Representation module. HERo operates with frozen VLA policy weights and requires no additional training. For the real-world experiments, task-specific policies are fine-tuned before evaluation and subsequently frozen, as described in Section&nbsp;S4.</p>
+      </section>
+      <details id="evaluation-protocol" class="experiment-section" aria-labelledby="details-heading-1">
+      <summary><h3 id="details-heading-1">S1. Evaluation Protocol</h3></summary>
+      <div class="experiment-content">
+      <p><strong>Common protocol.</strong> We evaluate HERo on LIBERO and SIMPLER–WidowX. Within each backbone, we compare visual representations under matched visual budgets while keeping the policy frozen. Results on both simulation benchmarks are averaged over three evaluation seeds. Full-resolution performance is reported as a reference.</p>
+      <p>For an RGB observation I<sub>t</sub> ∈ ℝ<sup>H×W×3</sup> and visual budget β ∈ (0, 1], the uniform representation retains</p>
+      <div class="equation" role="math">N<sub>b</sub> = min{HW, max(1, round(βHW))}</div>
+      <p>regularly distributed samples. The resulting low-resolution grid is bilinearly reconstructed to the original image size to match the frozen VLA input size. The comparison follows the information-matched image protocol described in the main paper: budgeted representations allocate the available visual information differently while operating at the same nominal pixel budget.</p>
+      <p><strong>LIBERO.</strong> We evaluate the four LIBERO suites: <em>Spatial</em>, <em>Object</em>, <em>Goal</em>, and <em>Long</em>. Each suite contains ten tasks. We use 50 rollouts per task, resulting in 500 rollouts per suite, and average the results over three evaluation seeds. We report success rates and the average number of environment steps over successful rollouts, as in Table&nbsp;II of the main paper.</p>
+      <p>The primary HERo comparisons use InstructVLA (1.5B parameters), SmolVLA (0.5B), and TurboVLA (0.2B). Table&nbsp;II additionally reports full-resolution and Uniform results for OpenVLA and UniVLA. The token-pruning study in Table&nbsp;III evaluates OpenVLA with SP-VLA and π<sub>0.5</sub> with Grid-16 and Grid-4. HERo and Uniform are compared within the corresponding backbone, visual budget, and token-pruning setting.</p>
+      <p><strong>SIMPLER–WidowX.</strong> We use the WidowX+Bridge setup in SIMPLER, with 24 rollouts per task and results averaged over three evaluation seeds. The manipulation tasks illustrated in Fig.&nbsp;3(a) are placing an eggplant in a basket, placing a spoon on a tablecloth, stacking a green cube on a yellow cube, and placing a carrot on a plate.</p>
+      <p>The primary HERo comparisons use CronusVLA (0.5B parameters) and MiniVLA (1B). We report average success rates for each visual budget. Table&nbsp;I also includes full-resolution and Uniform reference results for OpenVLA, SpatialVLA, and UniVLA.</p>
+      <p><strong>Visual budgets.</strong> The main LIBERO comparisons use β ∈ {1%, 3%, 5%, 10%, 20%}, while the main SIMPLER comparisons use β ∈ {5%, 10%, 20%}. Both include full-resolution reference results. The extended TurboVLA analysis on LIBERO examines budgets from 1% to full visual input, including budgets above 20%, to study how performance changes as more visual information is retained.</p>
+      </div>
+      </details>
+      <details id="representations" class="experiment-section" aria-labelledby="details-heading-2">
+      <summary><h3 id="details-heading-2">S2. HERo and Baseline Representations</h3></summary>
+      <div class="experiment-content">
+      <p><strong>Policy-guided relevance.</strong> HERo converts model-specific relevance signals from the frozen VLA into a normalized coarse spatial map. For policies exposing causal action-token attention, the signal aggregates attention from action tokens to the latest visual-token span across selected layers and heads. Other policy backends provide native relevance signals, such as fusion attention or cognition-token-to-vision attention, through the same coarse-map interface.</p>
+      <p>Policy relevance becomes available only after inference and therefore guides subsequent policy queries. The first query, or a query with missing feedback, defaults to uniform processing. At query t, HERo combines temporally smoothed relevance from earlier queries with an image-derived distractor prior from the current observation. It then extrapolates the relevance field, blends the extrapolation with the current field, and uses non-maximum suppression to extract up to K dominant candidate focus regions.</p>
+      <p><strong>AdVisR.</strong> AdVisR maps the selected focus locations to the normalized complex plane and constructs a multi-focus Möbius field. For a focus u<sub>k</sub>, the transformation is</p>
+      <div class="equation" role="math">q<sub>k</sub>(z) = s<sub>t</sub> (z − u<sub>k</sub>) / (1 − <span class="overline">u<sub>k</sub></span>z)<br>g<sub>k</sub>(z) = (q<sub>k</sub>(z) + u<sub>k</sub>) / (1 + <span class="overline">u<sub>k</sub></span>q<sub>k</sub>(z))</div>
+      <p>Here, s<sub>t</sub> ∈ [s<sub>min</sub>, 1] controls concentration, with smaller values producing stronger magnification around the selected focus.</p>
+      <p>The focus fields are blended using Gaussian weights and an identity component:</p>
+      <div class="equation" role="math">G<sub>t</sub>(z) = (bz + ∑<sub>k=1</sub><sup>Kₜ</sup> w<sub>k</sub>(z)g<sub>k</sub>(z)) / (b + ∑<sub>k=1</sub><sup>Kₜ</sup> w<sub>k</sub>(z))<br>w<sub>k</sub>(z) = exp(−‖z − u<sub>k</sub>‖<sub>2</sub><sup>2</sup> / (2σ<sup>2</sup>))</div>
+      <p>where K<sub>t</sub> ≤ K, σ controls the spatial extent of each focus, and b &gt; 0 preserves global scene structure away from the selected regions.</p>
+      <p>The image is warped, area-downsampled to H<sub>b</sub> × W<sub>b</sub>, bilinearly reconstructed to the original image size, and warped back using the inverse mapping. The budgeted dimensions are</p>
+      <div class="equation" role="math">H<sub>b</sub> = max(1, round(H√β)), &nbsp; W<sub>b</sub> = max(1, round(W√β))</div>
+      <p>Thus, H<sub>b</sub>W<sub>b</sub> ≈ βHW, with integer rounding determining the realized grid size. These operations redistribute spatial detail without introducing an additional neural network.</p>
+      <p><strong>Focused and contextual variants.</strong> HERo<sup>f</sup> and HERo<sup>c</sup> use the same interaction-strength signal but differ in their concentration coefficients. The focused variant sets κ<sub>t</sub><sup>(focus)</sup> = 1; its actual concentration still varies with the interaction-strength signal. The contextual variant initializes κ<sub>0</sub><sup>(context)</sup> = 0 and updates this coefficient online, subject to an upper bound κ<sub>max</sub> &lt; 1. This limits its concentration relative to the focused variant and preserves broader scene context.</p>
+      <p>The two representations are independently passed to the frozen VLA and evaluated as separate variants. HERo<sup>*</sup> in Tables&nbsp;I and II is a hypothetical oracle that succeeds when either variant succeeds. It characterizes their complementary success patterns rather than an implemented test-time selection or fallback mechanism.</p>
+      <p><h4>Baseline Methods</h4> 
+      <section class="equation">
+        For fair comparison, we extend the <em>information-matched image</em> protocol of Gizdov <em>et. al.</em> (2025)<a class="citation" href="#ref-gizdov" aria-label="Reference 1">[1]</a> to vision-language-action setting. All methods operate under the same pixel budgets, differing only in how visual information is allocated across space and time.</p>
+      <p >We compare HERo against four representative visual allocation strategies: <strong>Uniform</strong>, <strong>Foveated Representation</strong> (Gizdov et al., 2025)<a class="citation" href="#ref-gizdov" aria-label="Reference 1">[1]</a>, <strong>Sunflower-Inspired Representation</strong> (Killick et al., 2023)<a class="citation" href="#ref-killick" aria-label="Reference 2">[2]</a>, and <strong>SALISA</strong> (Ehteshami et al., 2022)<a class="citation" href="#ref-ehteshami" aria-label="Reference 3">[3]</a>. Uniform representation evenly distributes the available visual budget, while the remaining baselines use different forms of non-uniform spatial allocation.</p>
+      <p><strong>Uniform Sampling.</strong> We include uniform sampling as the main budget-matched baseline, where the same total pixel budget is distributed evenly across the entire observation. This provides a simple reference to measure whether non-uniform spatial allocation offers any benefit over treating all image regions equally.</p>
+      <p><strong>Static Foveated.</strong> We implement the static-foveated baseline following Gizdov <em>et al.</em> (2025)<a class="citation" href="#ref-gizdov" aria-label="Reference 1">[1]</a>, where higher spatial resolution is assigned around a fixed fixation point and gradually reduced toward the image boundary. Following the original setting, the fixation is kept at the image center throughout the evaluation. This baseline tests whether a fixed center-focused representation is sufficient without adapting to the current manipulation task.</p>
+      <p><strong>Sunflower Inspired.</strong> We adopt the biologically inspired sunflower-phyllotaxis sampling pattern proposed by Killick <em>et al.</em> (2023)<a class="citation" href="#ref-killick" aria-label="Reference 2">[2]</a>. The method distributes samples non-uniformly across the visual field using a structured pattern inspired by biological vision. Similar to the static-foveated baseline, we use it only as an input transformation and keep the sampling pattern fixed during evaluation. This allows us to compare HERo against a biologically inspired but non-adaptive representation.</p>
+      <p><strong>SALISA.</strong> We further compare against SALISA (Ehteshami et al., 2022)<a class="citation" href="#ref-ehteshami" aria-label="Reference 3">[3]</a>, a saliency-based adaptive sampling method that assigns more spatial resolution to visually salient regions while reducing resolution in less salient areas. Unlike the fixed baselines above, SALISA adapts its sampling according to the visual content of each observation. It therefore provides a stronger comparison for evaluating whether HERo's action-conditioned adaptation offers advantages beyond image-level visual saliency.</p>
+      <p><strong>Token Pruning.</strong> The token-pruning study additionally evaluates whether HERo's adaptation of the visual input complements subsequent visual-token reduction. Comparisons are reported for the corresponding SP-VLA<a class="citation" href="#ref-spvla" aria-label="Reference 4">[4]</a> and π<sub>0</sub><a class="citation" href="#ref-pi0" aria-label="Reference 5">[5]</a> settings, with Grid-16 and Grid-4<a class="citation" href="#ref-grids" aria-label="Reference 6">[6]</a> used for π<sub>0</sub> in Table&nbsp;III.</p>
+      <section class="references" aria-labelledby="references-heading">
+        <h3 id="references-heading">References</h3>
+        <ol>
+          <li id="ref-gizdov">A. Gizdov, S. Ullman, and D. Harari. Seeing More with Less: Human-like Representations in Vision Models. CVPR, 2025.</li>
+          <li id="ref-killick">G. Killick, P. Henderson, P. Siebert, and G. Aragon-Camarasa. Foveation in the Era of Deep Learning. BMVC, 2023.</li>
+          <li id="ref-ehteshami">B. Ehteshami Bejnordi, A. Habibian, F. Porikli, and A. Ghodrati. SALISA: Saliency-Based Input Sampling for Efficient Video Object Detection. ECCV, 2022.</li>
+          <li id="ref-spvla">Y. Li, Y. Meng, Z. Sun, K. Ji, C. Tang, J. Fan, X. Ma, S.-T. Xia, Z. Wang, and W. Zhu. SP-VLA: A Joint Model Scheduling and Token Pruning Approach for VLA Model Acceleration. ICLR, 2026.</li>
+          <li id="ref-pi0">K. Black, N. Brown, D. Driess, A. Esmail, M. Equi, C. Finn, et al. π<sub>0</sub>: A Vision-Language-Action Flow Model for General Robot Control. arXiv:2410.24164, 2024.</li>
+          <li id="ref-grids">Y. Feng, Z. Zhao, Y. Ma, C. Xia, C. Du, Y. Wang, and C. Xu. See What Matters: Differentiable Grid Sample Pruning for Generalizable Vision-Language-Action Model. arXiv:2605.11817, 2026.</li>
+        </ol>
+      </section>
+      </section>
+      </div>
+      </details>
+      <details id="ablations" class="experiment-section" aria-labelledby="details-heading-3">
+      <summary><h3 id="details-heading-3">S3. Ablations and Measurements</h3></summary>
+      <div class="experiment-content">
+      <p><strong>Component ablation.</strong> Figure&nbsp;5 evaluates HERo<sup>f</sup> with MiniVLA on SIMPLER–WidowX at 5%, 10%, and 20% visual budgets. The ablations remove the image-derived prior, temporal smoothing, or VLA feedback individually to assess their contributions to manipulation success.</p>
+      <p><strong>Trajectory efficiency.</strong> For LIBERO, the step statistic is the average number of environment steps over successful rollouts only. It is reported alongside success rate because the set of successful rollouts can differ between methods. A lower step count therefore characterizes successful execution and should be interpreted together with the corresponding success rate.</p>
+      <p><strong>Runtime.</strong> The experimental hardware comprises four NVIDIA RTX&nbsp;5090 GPUs with 32&nbsp;GB of VRAM each. At 224 × 224 resolution and β = 0.10, HERo adds 1.76&nbsp;ms per policy query on an NVIDIA RTX&nbsp;5090. This overhead consists of non-neural image warping and tensor operations; HERo introduces no additional neural-network FLOPs. The reported value measures HERo&#x27;s added processing overhead, rather than the end-to-end inference latency of every evaluated VLA backbone.</p>
+      </div>
+      </details>
+      <details id="real-world" class="experiment-section" aria-labelledby="details-heading-4">
+      <summary><h3 id="details-heading-4">S4. Real-World Manipulation Protocol</h3></summary>
+      <div class="experiment-content">
+      <p><strong>Tasks and policy training.</strong> We validate HERo<sup>f</sup> with SmolVLA on two physical manipulation tasks: <em>Apple-to-Plate Placement</em> and <em>Lid Closing</em>. The latter requires overcoming spring resistance and applying sufficient downward force to fully close the container.</p>
+      <p>For each task, we independently fine-tune a task-specific policy from the same pretrained SmolVLA base checkpoint, whose vision-language backbone is SmolVLM2-500M-Video-Instruct. Only the action expert and state projection are fine-tuned. Each policy is trained for 20,000 optimization steps with batch size 16, AdamW, a learning rate of 1 × 10<sup>−4</sup>, cosine decay, and 1,000 warm-up steps on a single NVIDIA RTX&nbsp;5090 GPU.</p>
+      <p><strong>Representation evaluation.</strong> The fine-tuned policy weights are frozen during evaluation, and the same task-specific policy is used across visual representations. We compare full-resolution inference with Uniform and HERo<sup>f</sup>, with the latter two using a 10% visual budget.</p>
+      <p>We evaluate Apple-to-Plate Placement over 12 episodes and Lid Closing over 15 episodes, and report average success rates across three independent evaluation sets. Task-policy fine-tuning is separate from HERo: HERo changes the visual representation supplied to the frozen policy without requiring additional policy training.</p>
+      </div>
+      </details>
+    </article>
+
+    <section class="intro" id="additional-results" aria-labelledby="page-title">
+      <p class="eyebrow">Supplementary Material</p>
+      <h2 id="page-title">Additional Quantitative Results</h2>
+      <p class="lead">Extended Results For HERo Across Task Suites, VLA Models, And Visual Budgets.</p>
+      <nav class="results-links" aria-label="Results navigation"><a href="#libero-results">LIBERO</a><a href="#widowx-results">SIMPLER (WidowX)</a></nav>
+    </section>
+
+    <section class="results-section" id="libero-results" aria-labelledby="suite-heading">
       <div class="section-heading">
         <div><p class="eyebrow">LIBERO</p><h2 id="suite-heading">Detailed Results On LIBERO</h2></div>
         <p class="section-note">Success Rate (%) / Average Steps</p>
@@ -34,7 +129,7 @@
       <section id="libero-analysis" class="dataset-analysis" aria-label="Interactive LIBERO Analysis"></section>
     </section>
 
-    <section class="results-section" aria-labelledby="task-heading">
+    <section class="results-section" id="widowx-results" aria-labelledby="task-heading">
       <div class="section-heading">
         <div><p class="eyebrow">SIMPLER (WIDOWX)</p><h2 id="task-heading">Detailed Results On SIMPLER (WidowX)</h2></div>
         <p class="section-note">Success Rate (%)</p>
@@ -149,79 +244,79 @@
   <template id="simpler-data">
     <table>
     <caption>SIMPLER WidowX Results</caption>
-    <thead><tr><th scope="col">Task</th><th scope="col">Model</th><th scope="col">Params</th><th scope="col">Full Res</th><th scope="col">Method</th><th scope="col">1% Success Rate (%)</th><th scope="col">1% Change vs Uniform</th><th scope="col">3% Success Rate (%)</th><th scope="col">3% Change vs Uniform</th><th scope="col">5% Success Rate (%)</th><th scope="col">5% Change vs Uniform</th><th scope="col">10% Success Rate (%)</th><th scope="col">10% Change vs Uniform</th><th scope="col">20% Success Rate (%)</th><th scope="col">20% Change vs Uniform</th></tr></thead>
+    <thead><tr><th scope="col">Task</th><th scope="col">Model</th><th scope="col">Params</th><th scope="col">Full Res</th><th scope="col">Method</th><th scope="col">5% Success Rate (%)</th><th scope="col">5% Change vs Uniform</th><th scope="col">10% Success Rate (%)</th><th scope="col">10% Change vs Uniform</th><th scope="col">20% Success Rate (%)</th><th scope="col">20% Change vs Uniform</th></tr></thead>
     <tbody>
-    <tr><td>Spoon on Towel</td><td>OpenVLA</td><td>7.5B</td><td>29.2</td><td>Uniform</td><td>0.0</td><td></td><td>8.3</td><td></td><td>16.7</td><td></td><td>20.8</td><td></td><td>25.0</td><td></td></tr>
-    <tr><td>Spoon on Towel</td><td>SpatialVLA</td><td>3B</td><td>20.8</td><td>Uniform</td><td>12.5</td><td></td><td>12.5</td><td></td><td>12.5</td><td></td><td>12.5</td><td></td><td>16.7</td><td></td></tr>
-    <tr><td>Spoon on Towel</td><td>UniVLA</td><td>7.6B</td><td>50.0</td><td>Uniform</td><td>33.3</td><td></td><td>37.5</td><td></td><td>41.7</td><td></td><td>41.7</td><td></td><td>45.8</td><td></td></tr>
-    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>Uniform</td><td>16.7</td><td></td><td>29.2</td><td></td><td>29.2</td><td></td><td>37.5</td><td></td><td>41.7</td><td></td></tr>
-    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>Foveated</td><td>20.8</td><td>+4.2</td><td>25.0</td><td>-4.2</td><td>25.0</td><td>-4.2</td><td>29.2</td><td>-8.3</td><td>33.3</td><td>-8.3</td></tr>
-    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>Sunflower</td><td>33.3</td><td>+16.7</td><td>37.5</td><td>+8.3</td><td>33.3</td><td>+4.2</td><td>50.0</td><td>+12.5</td><td>50.0</td><td>+8.3</td></tr>
-    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>SALISA</td><td>12.5</td><td>-4.2</td><td>37.5</td><td>+8.3</td><td>41.7</td><td>+12.5</td><td>41.7</td><td>+4.2</td><td>45.8</td><td>+4.2</td></tr>
-    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>CORTAct^focus</td><td>25.0</td><td>+8.3</td><td>45.8</td><td>+16.7</td><td>37.5</td><td>+8.3</td><td>45.8</td><td>+8.3</td><td>50.0</td><td>+8.3</td></tr>
-    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>CORTAct^context</td><td>25.0</td><td>+8.3</td><td>33.3</td><td>+4.2</td><td>29.2</td><td>0.0</td><td>41.7</td><td>+4.2</td><td>54.2</td><td>+12.5</td></tr>
-    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>CORTAct</td><td>45.8</td><td>+29.2</td><td>50.0</td><td>+20.8</td><td>50.0</td><td>+20.8</td><td>50.0</td><td>+12.5</td><td>54.2</td><td>+12.5</td></tr>
-    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>Uniform</td><td>0.0</td><td></td><td>0.0</td><td></td><td>12.5</td><td></td><td>41.7</td><td></td><td>54.2</td><td></td></tr>
-    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>Foveated</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>-12.5</td><td>4.2</td><td>-37.5</td><td>20.8</td><td>-33.3</td></tr>
-    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>Sunflower</td><td>0.0</td><td>0.0</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>-8.3</td><td>37.5</td><td>-4.2</td><td>50.0</td><td>-4.2</td></tr>
-    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>SALISA</td><td>0.0</td><td>0.0</td><td>4.2</td><td>+4.2</td><td>8.3</td><td>-4.2</td><td>29.2</td><td>-12.5</td><td>41.7</td><td>-12.5</td></tr>
-    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>CORTAct^focus</td><td>0.0</td><td>0.0</td><td>4.2</td><td>+4.2</td><td>33.3</td><td>+20.8</td><td>54.2</td><td>+12.5</td><td>62.5</td><td>+8.3</td></tr>
-    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>CORTAct^context</td><td>4.2</td><td>+4.2</td><td>0.0</td><td>0.0</td><td>16.7</td><td>+4.2</td><td>54.2</td><td>+12.5</td><td>54.2</td><td>0.0</td></tr>
-    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>CORTAct</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td><td>37.5</td><td>+25.0</td><td>66.7</td><td>+25.0</td><td>62.5</td><td>+8.3</td></tr>
-    <tr><td>Carrot on Plate</td><td>OpenVLA</td><td>7.5B</td><td>12.5</td><td>Uniform</td><td>0.0</td><td></td><td>4.2</td><td></td><td>4.2</td><td></td><td>8.3</td><td></td><td>12.5</td><td></td></tr>
-    <tr><td>Carrot on Plate</td><td>SpatialVLA</td><td>3B</td><td>37.5</td><td>Uniform</td><td>4.2</td><td></td><td>12.5</td><td></td><td>16.7</td><td></td><td>29.2</td><td></td><td>33.3</td><td></td></tr>
-    <tr><td>Carrot on Plate</td><td>UniVLA</td><td>7.6B</td><td>58.3</td><td>Uniform</td><td>33.3</td><td></td><td>37.5</td><td></td><td>41.7</td><td></td><td>45.8</td><td></td><td>54.2</td><td></td></tr>
-    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>Uniform</td><td>29.2</td><td></td><td>29.2</td><td></td><td>33.3</td><td></td><td>33.3</td><td></td><td>37.5</td><td></td></tr>
-    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>Foveated</td><td>8.3</td><td>-20.8</td><td>33.3</td><td>+4.2</td><td>50.0</td><td>+16.7</td><td>50.0</td><td>+16.7</td><td>50.0</td><td>+12.5</td></tr>
-    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>Sunflower</td><td>20.8</td><td>-8.3</td><td>33.3</td><td>+4.2</td><td>37.5</td><td>+4.2</td><td>45.8</td><td>+12.5</td><td>45.8</td><td>+8.3</td></tr>
-    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>SALISA</td><td>16.7</td><td>-12.5</td><td>29.2</td><td>0.0</td><td>33.3</td><td>0.0</td><td>54.2</td><td>+20.8</td><td>54.2</td><td>+16.7</td></tr>
-    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>CORTAct^focus</td><td>33.3</td><td>+4.1</td><td>41.7</td><td>+12.5</td><td>41.7</td><td>+8.3</td><td>41.7</td><td>+8.3</td><td>50.0</td><td>+12.5</td></tr>
-    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>CORTAct^context</td><td>29.2</td><td>0.0</td><td>33.3</td><td>+4.2</td><td>37.5</td><td>+4.2</td><td>33.3</td><td>0.0</td><td>45.8</td><td>+8.3</td></tr>
-    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>CORTAct</td><td>33.3</td><td>+4.1</td><td>45.8</td><td>+16.7</td><td>50.0</td><td>+16.7</td><td>50.0</td><td>+16.7</td><td>58.3</td><td>+20.8</td></tr>
-    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>Uniform</td><td>0.0</td><td></td><td>20.8</td><td></td><td>25.0</td><td></td><td>29.2</td><td></td><td>37.5</td><td></td></tr>
-    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>Foveated</td><td>0.0</td><td>0.0</td><td>0.0</td><td>-20.8</td><td>20.8</td><td>-4.2</td><td>20.8</td><td>-8.3</td><td>33.3</td><td>-4.2</td></tr>
-    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>Sunflower</td><td>0.0</td><td>0.0</td><td>0.0</td><td>-20.8</td><td>8.3</td><td>-16.7</td><td>8.3</td><td>-20.8</td><td>33.3</td><td>-4.2</td></tr>
-    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>SALISA</td><td>0.0</td><td>0.0</td><td>20.8</td><td>0.0</td><td>41.7</td><td>+16.7</td><td>45.8</td><td>+16.7</td><td>45.8</td><td>+8.3</td></tr>
-    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>CORTAct^focus</td><td>0.0</td><td>0.0</td><td>33.3</td><td>+12.5</td><td>41.7</td><td>+16.7</td><td>50.0</td><td>+20.8</td><td>54.2</td><td>+16.7</td></tr>
-    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>CORTAct^context</td><td>0.0</td><td>0.0</td><td>20.8</td><td>0.0</td><td>37.5</td><td>+12.5</td><td>41.7</td><td>+12.5</td><td>50.0</td><td>+12.5</td></tr>
-    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>CORTAct</td><td>0.0</td><td>0.0</td><td>33.3</td><td>+12.5</td><td>50.0</td><td>+25.0</td><td>54.2</td><td>+25.0</td><td>54.2</td><td>+16.7</td></tr>
-    <tr><td>Stack Cube</td><td>OpenVLA</td><td>7.5B</td><td>25.0</td><td>Uniform</td><td>0.0</td><td></td><td>0.0</td><td></td><td>12.5</td><td></td><td>25.0</td><td></td><td>25.0</td><td></td></tr>
-    <tr><td>Stack Cube</td><td>SpatialVLA</td><td>3B</td><td>37.5</td><td>Uniform</td><td>4.2</td><td></td><td>20.8</td><td></td><td>25.0</td><td></td><td>33.3</td><td></td><td>37.5</td><td></td></tr>
-    <tr><td>Stack Cube</td><td>UniVLA</td><td>7.6B</td><td>4.2</td><td>Uniform</td><td>4.2</td><td></td><td>4.2</td><td></td><td>4.2</td><td></td><td>4.2</td><td></td><td>4.2</td><td></td></tr>
-    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>Uniform</td><td>0.0</td><td></td><td>0.0</td><td></td><td>0.0</td><td></td><td>0.0</td><td></td><td>0.0</td><td></td></tr>
-    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>Foveated</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td></tr>
-    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>Sunflower</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td></tr>
-    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>SALISA</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td></tr>
-    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>CORTAct^focus</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td></tr>
-    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>CORTAct^context</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td></tr>
-    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>CORTAct</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td></tr>
-    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>Uniform</td><td>0.0</td><td></td><td>8.3</td><td></td><td>12.5</td><td></td><td>41.7</td><td></td><td>75.0</td><td></td></tr>
-    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>Foveated</td><td>0.0</td><td>0.0</td><td>4.2</td><td>-4.2</td><td>4.2</td><td>-8.3</td><td>4.2</td><td>-37.5</td><td>12.5</td><td>-62.5</td></tr>
-    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>Sunflower</td><td>0.0</td><td>0.0</td><td>0.0</td><td>-8.3</td><td>0.0</td><td>-12.5</td><td>33.3</td><td>-8.3</td><td>83.3</td><td>+8.3</td></tr>
-    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>SALISA</td><td>0.0</td><td>0.0</td><td>12.5</td><td>+4.2</td><td>25.0</td><td>+12.5</td><td>25.0</td><td>-16.7</td><td>29.2</td><td>-45.8</td></tr>
-    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>CORTAct^focus</td><td>0.0</td><td>0.0</td><td>16.7</td><td>+8.3</td><td>20.8</td><td>+8.3</td><td>58.3</td><td>+16.7</td><td>83.3</td><td>+8.3</td></tr>
-    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>CORTAct^context</td><td>0.0</td><td>0.0</td><td>8.3</td><td>0.0</td><td>12.5</td><td>0.0</td><td>41.7</td><td>0.0</td><td>75.0</td><td>0.0</td></tr>
-    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>CORTAct</td><td>0.0</td><td>0.0</td><td>16.7</td><td>+8.3</td><td>20.8</td><td>+8.3</td><td>58.3</td><td>+16.7</td><td>87.5</td><td>+12.5</td></tr>
-    <tr><td>Eggplant in Basket</td><td>OpenVLA</td><td>7.5B</td><td>54.2</td><td>Uniform</td><td>0.0</td><td></td><td>4.2</td><td></td><td>8.3</td><td></td><td>29.2</td><td></td><td>45.8</td><td></td></tr>
-    <tr><td>Eggplant in Basket</td><td>SpatialVLA</td><td>3B</td><td>79.2</td><td>Uniform</td><td>62.5</td><td></td><td>79.2</td><td></td><td>79.2</td><td></td><td>79.2</td><td></td><td>79.2</td><td></td></tr>
-    <tr><td>Eggplant in Basket</td><td>UniVLA</td><td>7.6B</td><td>79.2</td><td>Uniform</td><td>45.8</td><td></td><td>62.5</td><td></td><td>75.0</td><td></td><td>79.2</td><td></td><td>79.2</td><td></td></tr>
-    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>Uniform</td><td>45.8</td><td></td><td>50.0</td><td></td><td>66.7</td><td></td><td>70.8</td><td></td><td>70.8</td><td></td></tr>
-    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>Foveated</td><td>0.0</td><td>-45.8</td><td>41.7</td><td>-8.3</td><td>50.0</td><td>-16.7</td><td>58.3</td><td>-12.5</td><td>70.8</td><td>0.0</td></tr>
-    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>Sunflower</td><td>45.8</td><td>0.0</td><td>62.5</td><td>+12.5</td><td>66.7</td><td>0.0</td><td>83.3</td><td>+12.5</td><td>83.3</td><td>+12.5</td></tr>
-    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>SALISA</td><td>29.2</td><td>-16.7</td><td>58.3</td><td>+8.3</td><td>75.0</td><td>+8.3</td><td>79.2</td><td>+8.3</td><td>83.3</td><td>+12.5</td></tr>
-    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>CORTAct^focus</td><td>50.0</td><td>+4.2</td><td>66.7</td><td>+16.7</td><td>83.3</td><td>+16.7</td><td>83.3</td><td>+12.5</td><td>87.5</td><td>+16.7</td></tr>
-    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>CORTAct^context</td><td>50.0</td><td>+4.2</td><td>62.5</td><td>+12.5</td><td>83.3</td><td>+16.7</td><td>75.0</td><td>+4.2</td><td>70.8</td><td>0.0</td></tr>
-    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>CORTAct</td><td>54.2</td><td>+8.3</td><td>66.7</td><td>+16.7</td><td>87.5</td><td>+20.8</td><td>83.3</td><td>+12.5</td><td>87.5</td><td>+16.7</td></tr>
-    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>Uniform</td><td>0.0</td><td></td><td>4.2</td><td></td><td>4.2</td><td></td><td>8.3</td><td></td><td>8.3</td><td></td></tr>
-    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>Foveated</td><td>0.0</td><td>0.0</td><td>0.0</td><td>-4.2</td><td>0.0</td><td>-4.2</td><td>0.0</td><td>-8.3</td><td>12.5</td><td>+4.2</td></tr>
-    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>Sunflower</td><td>0.0</td><td>0.0</td><td>4.2</td><td>0.0</td><td>12.5</td><td>+8.3</td><td>33.3</td><td>+25.0</td><td>33.3</td><td>+25.0</td></tr>
-    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>SALISA</td><td>0.0</td><td>0.0</td><td>0.0</td><td>-4.2</td><td>0.0</td><td>-4.2</td><td>12.5</td><td>+4.2</td><td>16.7</td><td>+8.3</td></tr>
-    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>CORTAct^focus</td><td>0.0</td><td>0.0</td><td>29.2</td><td>+25.0</td><td>12.5</td><td>+8.3</td><td>33.3</td><td>+25.0</td><td>25.0</td><td>+16.7</td></tr>
-    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>CORTAct^context</td><td>0.0</td><td>0.0</td><td>8.3</td><td>+4.2</td><td>4.2</td><td>0.0</td><td>16.7</td><td>+8.3</td><td>20.8</td><td>+12.5</td></tr>
-    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>CORTAct</td><td>0.0</td><td>0.0</td><td>37.5</td><td>+33.3</td><td>12.5</td><td>+8.3</td><td>33.3</td><td>+25.0</td><td>37.5</td><td>+29.2</td></tr>
+    <tr><td>Spoon on Towel</td><td>OpenVLA</td><td>7.5B</td><td>29.2</td><td>Uniform</td><td>16.7</td><td></td><td>20.8</td><td></td><td>25.0</td><td></td></tr>
+    <tr><td>Spoon on Towel</td><td>SpatialVLA</td><td>3B</td><td>20.8</td><td>Uniform</td><td>12.5</td><td></td><td>12.5</td><td></td><td>16.7</td><td></td></tr>
+    <tr><td>Spoon on Towel</td><td>UniVLA</td><td>7.6B</td><td>50.0</td><td>Uniform</td><td>41.7</td><td></td><td>41.7</td><td></td><td>45.8</td><td></td></tr>
+    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>Uniform</td><td>29.2</td><td></td><td>37.5</td><td></td><td>41.7</td><td></td></tr>
+    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>Foveated</td><td>25.0</td><td>-4.2</td><td>29.2</td><td>-8.3</td><td>33.3</td><td>-8.3</td></tr>
+    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>Sunflower</td><td>33.3</td><td>+4.2</td><td>50.0</td><td>+12.5</td><td>50.0</td><td>+8.3</td></tr>
+    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>SALISA</td><td>41.7</td><td>+12.5</td><td>41.7</td><td>+4.2</td><td>45.8</td><td>+4.2</td></tr>
+    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>CORTAct^focus</td><td>37.5</td><td>+8.3</td><td>45.8</td><td>+8.3</td><td>50.0</td><td>+8.3</td></tr>
+    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>CORTAct^context</td><td>29.2</td><td>0.0</td><td>41.7</td><td>+4.2</td><td>54.2</td><td>+12.5</td></tr>
+    <tr><td>Spoon on Towel</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>CORTAct</td><td>50.0</td><td>+20.8</td><td>50.0</td><td>+12.5</td><td>54.2</td><td>+12.5</td></tr>
+    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>Uniform</td><td>12.5</td><td></td><td>41.7</td><td></td><td>54.2</td><td></td></tr>
+    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>Foveated</td><td>0.0</td><td>-12.5</td><td>4.2</td><td>-37.5</td><td>20.8</td><td>-33.3</td></tr>
+    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>Sunflower</td><td>4.2</td><td>-8.3</td><td>37.5</td><td>-4.2</td><td>50.0</td><td>-4.2</td></tr>
+    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>SALISA</td><td>8.3</td><td>-4.2</td><td>29.2</td><td>-12.5</td><td>41.7</td><td>-12.5</td></tr>
+    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>CORTAct^focus</td><td>33.3</td><td>+20.8</td><td>54.2</td><td>+12.5</td><td>62.5</td><td>+8.3</td></tr>
+    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>CORTAct^context</td><td>16.7</td><td>+4.2</td><td>54.2</td><td>+12.5</td><td>54.2</td><td>0.0</td></tr>
+    <tr><td>Spoon on Towel</td><td>MiniVLA</td><td>1B</td><td>54.2</td><td>CORTAct</td><td>37.5</td><td>+25.0</td><td>66.7</td><td>+25.0</td><td>62.5</td><td>+8.3</td></tr>
+    <tr><td>Carrot on Plate</td><td>OpenVLA</td><td>7.5B</td><td>12.5</td><td>Uniform</td><td>4.2</td><td></td><td>8.3</td><td></td><td>12.5</td><td></td></tr>
+    <tr><td>Carrot on Plate</td><td>SpatialVLA</td><td>3B</td><td>37.5</td><td>Uniform</td><td>16.7</td><td></td><td>29.2</td><td></td><td>33.3</td><td></td></tr>
+    <tr><td>Carrot on Plate</td><td>UniVLA</td><td>7.6B</td><td>58.3</td><td>Uniform</td><td>41.7</td><td></td><td>45.8</td><td></td><td>54.2</td><td></td></tr>
+    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>Uniform</td><td>33.3</td><td></td><td>33.3</td><td></td><td>37.5</td><td></td></tr>
+    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>Foveated</td><td>50.0</td><td>+16.7</td><td>50.0</td><td>+16.7</td><td>50.0</td><td>+12.5</td></tr>
+    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>Sunflower</td><td>37.5</td><td>+4.2</td><td>45.8</td><td>+12.5</td><td>45.8</td><td>+8.3</td></tr>
+    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>SALISA</td><td>33.3</td><td>0.0</td><td>54.2</td><td>+20.8</td><td>54.2</td><td>+16.7</td></tr>
+    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>CORTAct^focus</td><td>41.7</td><td>+8.3</td><td>41.7</td><td>+8.3</td><td>50.0</td><td>+12.5</td></tr>
+    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>CORTAct^context</td><td>37.5</td><td>+4.2</td><td>33.3</td><td>0.0</td><td>45.8</td><td>+8.3</td></tr>
+    <tr><td>Carrot on Plate</td><td>CronusVLA</td><td>0.5B</td><td>41.7</td><td>CORTAct</td><td>50.0</td><td>+16.7</td><td>50.0</td><td>+16.7</td><td>58.3</td><td>+20.8</td></tr>
+    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>Uniform</td><td>25.0</td><td></td><td>29.2</td><td></td><td>37.5</td><td></td></tr>
+    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>Foveated</td><td>20.8</td><td>-4.2</td><td>20.8</td><td>-8.3</td><td>33.3</td><td>-4.2</td></tr>
+    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>Sunflower</td><td>8.3</td><td>-16.7</td><td>8.3</td><td>-20.8</td><td>33.3</td><td>-4.2</td></tr>
+    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>SALISA</td><td>41.7</td><td>+16.7</td><td>45.8</td><td>+16.7</td><td>45.8</td><td>+8.3</td></tr>
+    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>CORTAct^focus</td><td>41.7</td><td>+16.7</td><td>50.0</td><td>+20.8</td><td>54.2</td><td>+16.7</td></tr>
+    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>CORTAct^context</td><td>37.5</td><td>+12.5</td><td>41.7</td><td>+12.5</td><td>50.0</td><td>+12.5</td></tr>
+    <tr><td>Carrot on Plate</td><td>MiniVLA</td><td>1B</td><td>41.7</td><td>CORTAct</td><td>50.0</td><td>+25.0</td><td>54.2</td><td>+25.0</td><td>54.2</td><td>+16.7</td></tr>
+    <tr><td>Stack Cube</td><td>OpenVLA</td><td>7.5B</td><td>25.0</td><td>Uniform</td><td>12.5</td><td></td><td>25.0</td><td></td><td>25.0</td><td></td></tr>
+    <tr><td>Stack Cube</td><td>SpatialVLA</td><td>3B</td><td>37.5</td><td>Uniform</td><td>25.0</td><td></td><td>33.3</td><td></td><td>37.5</td><td></td></tr>
+    <tr><td>Stack Cube</td><td>UniVLA</td><td>7.6B</td><td>4.2</td><td>Uniform</td><td>4.2</td><td></td><td>4.2</td><td></td><td>4.2</td><td></td></tr>
+    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>Uniform</td><td>0.0</td><td></td><td>0.0</td><td></td><td>0.0</td><td></td></tr>
+    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>Foveated</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td></tr>
+    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>Sunflower</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td></tr>
+    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>SALISA</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td></tr>
+    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>CORTAct^focus</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td><td>0.0</td></tr>
+    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>CORTAct^context</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td></tr>
+    <tr><td>Stack Cube</td><td>CronusVLA</td><td>0.5B</td><td>0.0</td><td>CORTAct</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td><td>4.2</td><td>+4.2</td></tr>
+    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>Uniform</td><td>12.5</td><td></td><td>41.7</td><td></td><td>75.0</td><td></td></tr>
+    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>Foveated</td><td>4.2</td><td>-8.3</td><td>4.2</td><td>-37.5</td><td>12.5</td><td>-62.5</td></tr>
+    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>Sunflower</td><td>0.0</td><td>-12.5</td><td>33.3</td><td>-8.3</td><td>83.3</td><td>+8.3</td></tr>
+    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>SALISA</td><td>25.0</td><td>+12.5</td><td>25.0</td><td>-16.7</td><td>29.2</td><td>-45.8</td></tr>
+    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>CORTAct^focus</td><td>20.8</td><td>+8.3</td><td>58.3</td><td>+16.7</td><td>83.3</td><td>+8.3</td></tr>
+    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>CORTAct^context</td><td>12.5</td><td>0.0</td><td>41.7</td><td>0.0</td><td>75.0</td><td>0.0</td></tr>
+    <tr><td>Stack Cube</td><td>MiniVLA</td><td>1B</td><td>79.2</td><td>CORTAct</td><td>20.8</td><td>+8.3</td><td>58.3</td><td>+16.7</td><td>87.5</td><td>+12.5</td></tr>
+    <tr><td>Eggplant in Basket</td><td>OpenVLA</td><td>7.5B</td><td>54.2</td><td>Uniform</td><td>8.3</td><td></td><td>29.2</td><td></td><td>45.8</td><td></td></tr>
+    <tr><td>Eggplant in Basket</td><td>SpatialVLA</td><td>3B</td><td>79.2</td><td>Uniform</td><td>79.2</td><td></td><td>79.2</td><td></td><td>79.2</td><td></td></tr>
+    <tr><td>Eggplant in Basket</td><td>UniVLA</td><td>7.6B</td><td>79.2</td><td>Uniform</td><td>75.0</td><td></td><td>79.2</td><td></td><td>79.2</td><td></td></tr>
+    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>Uniform</td><td>66.7</td><td></td><td>70.8</td><td></td><td>70.8</td><td></td></tr>
+    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>Foveated</td><td>50.0</td><td>-16.7</td><td>58.3</td><td>-12.5</td><td>70.8</td><td>0.0</td></tr>
+    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>Sunflower</td><td>66.7</td><td>0.0</td><td>83.3</td><td>+12.5</td><td>83.3</td><td>+12.5</td></tr>
+    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>SALISA</td><td>75.0</td><td>+8.3</td><td>79.2</td><td>+8.3</td><td>83.3</td><td>+12.5</td></tr>
+    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>CORTAct^focus</td><td>83.3</td><td>+16.7</td><td>83.3</td><td>+12.5</td><td>87.5</td><td>+16.7</td></tr>
+    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>CORTAct^context</td><td>83.3</td><td>+16.7</td><td>75.0</td><td>+4.2</td><td>70.8</td><td>0.0</td></tr>
+    <tr><td>Eggplant in Basket</td><td>CronusVLA</td><td>0.5B</td><td>75.0</td><td>CORTAct</td><td>87.5</td><td>+20.8</td><td>83.3</td><td>+12.5</td><td>87.5</td><td>+16.7</td></tr>
+    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>Uniform</td><td>4.2</td><td></td><td>8.3</td><td></td><td>8.3</td><td></td></tr>
+    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>Foveated</td><td>0.0</td><td>-4.2</td><td>0.0</td><td>-8.3</td><td>12.5</td><td>+4.2</td></tr>
+    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>Sunflower</td><td>12.5</td><td>+8.3</td><td>33.3</td><td>+25.0</td><td>33.3</td><td>+25.0</td></tr>
+    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>SALISA</td><td>0.0</td><td>-4.2</td><td>12.5</td><td>+4.2</td><td>16.7</td><td>+8.3</td></tr>
+    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>CORTAct^focus</td><td>12.5</td><td>+8.3</td><td>33.3</td><td>+25.0</td><td>25.0</td><td>+16.7</td></tr>
+    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>CORTAct^context</td><td>4.2</td><td>0.0</td><td>16.7</td><td>+8.3</td><td>20.8</td><td>+12.5</td></tr>
+    <tr><td>Eggplant in Basket</td><td>MiniVLA</td><td>1B</td><td>12.5</td><td>CORTAct</td><td>12.5</td><td>+8.3</td><td>33.3</td><td>+25.0</td><td>37.5</td><td>+29.2</td></tr>
     </tbody>
   </table>
   </template>
-  <footer class="container"><span>HERo · Anonymous Submission</span><a href="#top">Back To Top ↑</a></footer>
+  <footer class="container"><span>HERo</span><a href="#top">Back To Top ↑</a></footer>
 </body>
 </html>

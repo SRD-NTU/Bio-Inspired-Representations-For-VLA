@@ -1,6 +1,5 @@
 'use strict';
 
-const budgets = ['1%', '3%', '5%', '10%', '20%'];
 const displayTasks = {
   libero: ['Goal', 'Object', 'Spatial', 'Long'],
   simpler: ['Spoon on Towel', 'Carrot on Plate', 'Stack Cube', 'Eggplant in Basket']
@@ -30,7 +29,7 @@ function methodMarkup(method) {
   return esc(methodLabels[method] || method);
 }
 
-function renderTaskTable(task, rows, hasSteps, isOpen = false) {
+function renderTaskTable(task, rows, hasSteps, budgets, isOpen = false) {
   const stepNote = hasSteps ? ' / Average Steps' : '';
   const headings = ['Model', 'Parameters', 'Full Res.', 'Method', ...budgets.map(b => `${b} Budget`)];
   const groups = [];
@@ -62,7 +61,7 @@ function renderTaskTable(task, rows, hasSteps, isOpen = false) {
   return `<details class="task-card" data-task="${esc(task)}"${open}><summary>${esc(taskName)} <span class="row-count">${rows.length} Comparisons</span></summary><div class="table-scroll" role="region" aria-label="${esc(taskName)} Results Table" tabindex="0"><table><caption>${esc(taskName)} Results: Success Rate${stepNote}</caption><thead><tr>${headingsHtml}</tr></thead><tbody>${body}</tbody></table></div></details>`;
 }
 
-function setupTableTools(rows, tasks, targetId, toolsId, hasSteps) {
+function setupTableTools(rows, tasks, targetId, toolsId, hasSteps, budgets) {
   const target = document.getElementById(targetId);
   const tools = document.getElementById(toolsId);
   const count = rows.length;
@@ -78,7 +77,7 @@ function setupTableTools(rows, tasks, targetId, toolsId, hasSteps) {
     });
     const visibleTasks = tasks.filter(task => filtered.some(row => row.Task === task));
     target.innerHTML = visibleTasks.length
-      ? visibleTasks.map(task => renderTaskTable(task, filtered.filter(row => row.Task === task), hasSteps, expanded.has(task))).join('')
+      ? visibleTasks.map(task => renderTaskTable(task, filtered.filter(row => row.Task === task), hasSteps, budgets, expanded.has(task))).join('')
       : '<p class="empty-results">No Rows Match This Search.</p>';
     target.querySelectorAll('.task-card').forEach(card => card.addEventListener('toggle', () => {
       if (card.open) expanded.add(card.dataset.task);
@@ -112,7 +111,7 @@ function matchedTaskModelPairs(rows) {
   return new Set([...methodsByPair].filter(([, methods]) => expected.every(method => methods.has(method))).map(([pair]) => pair));
 }
 
-function aggregateSeries(rows, taskFilter, view, selectedMethods, metric) {
+function aggregateSeries(rows, taskFilter, view, selectedMethods, metric, budgets) {
   const selectedRows = rows.filter(row => taskFilter === 'all' || row.Task === taskFilter);
   const valueKey = budget => metric === 'steps' ? `${budget} Avg Steps` : `${budget} Success Rate (%)`;
   if (view === 'methods') {
@@ -134,7 +133,7 @@ function aggregateSeries(rows, taskFilter, view, selectedMethods, metric) {
   }));
 }
 
-function renderBarChart(target, series, metric, taskFilter, view, pairCount, svgId) {
+function renderBarChart(target, series, metric, taskFilter, view, pairCount, svgId, budgets) {
   const width = 980, height = 370, left = 66, right = 955, top = 22, bottom = 285;
   const values = series.flatMap(item => item.points).filter(Number.isFinite);
   const max = metric === 'success' ? 100 : values.length ? Math.max(50, Math.ceil(Math.max(...values) / 50) * 50) : 50;
@@ -252,7 +251,7 @@ function renderBackboneChart(target, rows, taskFilter, selectedMethods, metric, 
   });
 }
 
-function initializeDatasetChart(rows, tasks, hasSteps, targetId) {
+function initializeDatasetChart(rows, tasks, hasSteps, targetId, budgets) {
   const target = document.getElementById(targetId);
   const taskOptions = ['<option value="all">All Tasks</option>', ...tasks.map(task => `<option value="${esc(task)}">${esc(taskDisplayNames[task] || task)}</option>`)].join('');
   const metricOptions = `<option value="success">Success Rate (%)</option>${hasSteps ? '<option value="steps">Average Steps</option>' : ''}`;
@@ -280,8 +279,8 @@ function initializeDatasetChart(rows, tasks, hasSteps, targetId) {
     if (viewSelect.value === 'models') {
       renderBackboneChart(output, rows, taskSelect.value, selectedMethods, metric, budgetSelect.value, `${targetId}-svg-title`);
     } else {
-      const series = aggregateSeries(rows, taskSelect.value, viewSelect.value, selectedMethods, metric);
-      renderBarChart(output, series, metric, taskSelect.value, viewSelect.value, pairCount, `${targetId}-svg-title`);
+      const series = aggregateSeries(rows, taskSelect.value, viewSelect.value, selectedMethods, metric, budgets);
+      renderBarChart(output, series, metric, taskSelect.value, viewSelect.value, pairCount, `${targetId}-svg-title`, budgets);
     }
   };
   allMethods.addEventListener('change', () => {
@@ -308,13 +307,14 @@ function loadTable(dataId, targetId, tasks, hasSteps, chartTargetId, toolsId) {
     const dataTable = dataTemplate?.content.querySelector('table');
     if (!dataTable?.tHead?.rows.length || !dataTable.tBodies.length) throw new Error(`No results table found in ${dataId}`);
     const headers = [...dataTable.tHead.rows[0].cells].map(cell => cell.textContent);
+    const budgets = headers.filter(header => header.endsWith(' Success Rate (%)')).map(header => header.split(' ')[0]);
     const rows = [...dataTable.tBodies[0].rows].map(row => {
       const values = [...row.cells].map(cell => cell.textContent);
       return Object.fromEntries(headers.map((header, index) => [header, values[index] ?? '']));
     });
-    setupTableTools(rows, tasks, targetId, toolsId, hasSteps);
+    setupTableTools(rows, tasks, targetId, toolsId, hasSteps, budgets);
     if (!target.querySelector('.task-card')) throw new Error('No result rows were found.');
-    initializeDatasetChart(rows, tasks, hasSteps, chartTargetId);
+    initializeDatasetChart(rows, tasks, hasSteps, chartTargetId, budgets);
   } catch (error) {
     target.innerHTML = '<p class="error">Results Could Not Be Loaded.</p>';
     document.getElementById(chartTargetId).innerHTML = '';
@@ -324,3 +324,17 @@ function loadTable(dataId, targetId, tasks, hasSteps, chartTargetId, toolsId) {
 
 loadTable('libero-data', 'suite-results', displayTasks.libero, true, 'libero-analysis', 'suite-tools');
 loadTable('simpler-data', 'task-results', displayTasks.simpler, false, 'simpler-analysis', 'task-tools');
+
+// Reveal a protocol section when navigating to it, including direct links.
+function revealExperimentSection() {
+  const section = document.getElementById(window.location.hash.slice(1));
+  if (section?.matches('details.experiment-section')) section.open = true;
+}
+window.addEventListener('hashchange', revealExperimentSection);
+document.querySelectorAll('.site-nav a').forEach(link => {
+  link.addEventListener('click', () => {
+    const section = document.getElementById(link.hash.slice(1));
+    if (section?.matches('details.experiment-section')) section.open = true;
+  });
+});
+revealExperimentSection();
